@@ -1,0 +1,22 @@
+# All Objects have an ID and Type 
+#
+# Member Properties
+# items within brackets are properties of members
+#   each property represents a behavior of which
+#   there is a default and optional (on/off) keyword
+# each property will have a brief description followed 
+# by ':' then the default/optional keyword, then the required
+#
+#   existance: required,optional
+#   
+# Class Adjectives
+# Serializable: Serialize, Deserialize, Construct 
+# Storable:     Load, Save, Delete 
+
+class TestClass {
+	int MyNumber [optional]; #another comment
+	string MyString [];
+	adjective Serializable;
+	adjective Storable;
+
+};
