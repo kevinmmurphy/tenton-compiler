@@ -8,7 +8,7 @@ sub new {
      my $class = shift;
      my $self = { name => shift,
 		  body => shift, 
-		  variables => ()};
+		  variables => []};
      bless $self, $class;
      return $self;
 }
@@ -20,13 +20,13 @@ sub parse {
      	#my @variables = $1 =~ /\s*(\S+\s+\S+?\s*?\[.*?\];)/g;
         my @variables = split(/;/, $1); 
 	
-        print Dumper(@variables);
+        #print Dumper(@variables);
 	foreach my $variable (@variables)
      	{
      	   if ($variable =~ /\s*(\S+)\s+(\S+)\s*?(\[?.*?\]?)$/)
 	   {
      	        print "type:$1 name:$2 attributes:$3\n";
-     	        #push($self->{variables}, {type => $1, name => $2, attributes => $3,});
+     	        push($self->{variables}, {type => $1, name => $2, attributes => $3,});
            }
 	}
      }
@@ -34,5 +34,6 @@ sub parse {
      {
 	print "Invalid class body!";
      }
+     print Dumper($self);
 }
 1;
