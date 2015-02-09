@@ -15,6 +15,7 @@
 
 class TestClass {
 	int MyNumber [optional]; #another comment
+        int MyOtherNumber;
 	string MyString [];
         bool MyBool [required, mutable, ugly]; 	
 	adjective Serializable;

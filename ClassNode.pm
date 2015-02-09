@@ -45,6 +45,7 @@ sub parse {
      {
 	print "Invalid class body!";
      }
+     delete($self->{body});
      print Dumper($self);
 }
 1;
