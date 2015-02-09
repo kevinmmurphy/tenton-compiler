@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
+package ClassNode;
 use Data::Dumper;
 
-package ClassNode;
 
 sub new {
      my $class = shift;
@@ -17,13 +17,18 @@ sub parse {
      my $self = shift;
      if ($self->{body} =~ /\{(.*)\}/)
      {
-     	my @variables = $1 =~ /\s*(\S+\s+\S+\s*\[.*\]);/g;
-     	foreach my $variable(@variables)
+     	#my @variables = $1 =~ /\s*(\S+\s+\S+?\s*?\[.*?\];)/g;
+        my @variables = split(/;/, $1); 
+	
+        print Dumper(@variables);
+	foreach my $variable (@variables)
      	{
-     	   $variable =~ /\s*(\S+)\s+(\S+)\s*(\[.*\]);/g
-     	   print "type:$1 name:$2 attributes:$3";
-     	   push($self->{variables}, {type => $1, name => $2, attributes => $3,});
-     	}
+     	   if ($variable =~ /\s*(\S+)\s+(\S+)\s*?(\[?.*?\]?)$/)
+	   {
+     	        print "type:$1 name:$2 attributes:$3\n";
+     	        #push($self->{variables}, {type => $1, name => $2, attributes => $3,});
+           }
+	}
      }
      else
      {
