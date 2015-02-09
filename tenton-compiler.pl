@@ -30,8 +30,21 @@ open(INPUT, $filename) or die "Couldn't open input file \'$filename\', $!";
 while (<INPUT>)
 {
      if ( /^([^#]+)?(#.+)*$/ && defined($1)) {
-       	$allines = $allines . $1;	
+ 	my $line = $1;
+	chomp($line);
+       	$allines = $allines . $line;	
      }
 }
+# 
+# create class objects
+#
+if ( $allines =~ /class\s+(\S+)\s*(\{.+\};)/ )
+{
+    #print "$1 $2";
+    my $cls = new ClassNode($1,$2);
+    $cls->parse();
+} 
 
-print "$allines";
+
+#print "$allines";
+print "\n";
