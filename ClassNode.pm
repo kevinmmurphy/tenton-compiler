@@ -26,7 +26,7 @@ sub parse {
      	{
      	   if ($variable =~ /\s*(\S+)\s+(\S+)\s*?(\[?.*?\]?)$/)
 	   {
-     	        print "type:$1 name:$2 attributes:$3\n";
+     	        #print "type:$1 name:$2 attributes:$3\n";
 		my $type = $1;
 	        my $name = $2;
 		my $attributes = $3;
@@ -36,7 +36,11 @@ sub parse {
 		} 	
 		else 
 		{
-		     push($self->{variables}, {type => $1, name => $2, attributes => $3,});
+		     $attributes =~ s/[\[\],]/ /g;
+		     #print "attributes:" . Dumper($attributes);
+		     my @attrs= ($attributes =~ /(\w+)/g);
+	             print "array:" .Dumper(@attrs) ."\n";	
+		     push($self->{variables}, {type => $type, name => $name, attributes => [@attrs],});
 		}
            }
 	}
