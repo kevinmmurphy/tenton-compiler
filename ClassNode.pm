@@ -37,9 +37,7 @@ sub parse {
 		else 
 		{
 		     $attributes =~ s/[\[\],]/ /g;
-		     #print "attributes:" . Dumper($attributes);
 		     my @attrs= ($attributes =~ /(\w+)/g);
-	             print "array:" .Dumper(@attrs) ."\n";	
 		     push($self->{variables}, {type => $type, name => $name, attributes => [@attrs],});
 		}
            }
@@ -52,4 +50,20 @@ sub parse {
      delete($self->{body});
      print Dumper($self);
 }
+
+sub GetName {
+     my $self = shift;
+     return $self->{name};
+}
+
+sub GetAttributes {
+     my $self = shift;
+     return $self->{attributes};
+}
+
+sub GetVariables {
+     my $self = shift;
+     return $self->{variables};
+}
+
 1;
