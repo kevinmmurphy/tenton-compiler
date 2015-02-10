@@ -11,6 +11,7 @@ sub new {
 		  variables => [],
 		  adjectives => []};
      bless $self, $class;
+     $self->parse();
      return $self;
 }
 
