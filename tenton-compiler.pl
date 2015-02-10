@@ -40,9 +40,7 @@ while (<INPUT>)
 #
 if ( $allines =~ /class\s+(\S+)\s*(\{.+\};)/ )
 {
-    #print "$1 $2";
     my $cls = new ClassNode($1,$2);
-    $cls->parse();
 } 
 
 
