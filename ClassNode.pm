@@ -59,7 +59,7 @@ sub GetName {
 
 sub GetAttributes {
      my $self = shift;
-     return $self->{attributes};
+     return $self->{adjectives};
 }
 
 sub GetVariables {
