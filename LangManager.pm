@@ -16,7 +16,9 @@ sub Generate {
      my $classnode = shift;
      my @variables = $classnode->GetVariables();
      my @attributes = $classnode->GetAttribures();
-
+     my $hname = $classnode->GetName() + ".h";
+     my $iname = $classnode->GetName() + ".cpp";
+     print "Header:$hname Implementation:$iname\n";
 }
 
 
