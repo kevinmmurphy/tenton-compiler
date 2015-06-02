@@ -6,6 +6,7 @@ use strict;
 use warnings;
 
 use ClassNode;
+use LangManager;
 package main;
 #
 #check number of arguments 
@@ -38,9 +39,12 @@ while (<INPUT>)
 # 
 # create class objects
 #
+my $langmgr = new LangManager();
 if ( $allines =~ /class\s+(\S+)\s*(\{.+\};)/ )
 {
     my $cls = new ClassNode($1,$2);
+    $langmgr->Generate($cls);
+    
 } 
 
 
