@@ -49,7 +49,7 @@ sub parse {
 	print "Invalid class body!";
      }
      delete($self->{body});
-     print Dumper($self);
+     #print Dumper($self);
 }
 
 sub GetName {
@@ -57,7 +57,7 @@ sub GetName {
      return $self->{name};
 }
 
-sub GetAttributes {
+sub GetAdjectives{
      my $self = shift;
      return $self->{adjectives};
 }

@@ -4,6 +4,13 @@
 #
 use strict;
 use warnings;
+  
+#
+#check local directories first
+#
+use lib '.';
+
+
 
 use ClassNode;
 use LangManager;

@@ -5,7 +5,7 @@ package LangManager;
 use ClassNode;
 use Data::Dumper;
 use IO::File;
-
+use Module::Load;
 
 
 sub new {
@@ -17,8 +17,6 @@ sub new {
 sub Generate {
      my $self = shift;
      my $classnode = shift;
-     my @variables = $classnode->GetVariables();
-     my @attributes = $classnode->GetAttributes();
      my $hname = $classnode->GetName();
      my $iname = $classnode->GetName();
      
@@ -36,31 +34,68 @@ sub GenerateHeader {
 
      $fh = IO::File->new();
      if ($fh->open("> $filename")) {
-          
-          print $fh "#include stdio.h\n";
+          my $variables = $class->GetVariables();
+          my $adjectives = $class->GetAdjectives();
+          #
+          # print out headers and includes
+          # 
+          #print $fh "#include stdio.h\n";
+          foreach my $a (@$adjectives)
+          {
+               print $fh "#include \"I$a.h\"\n"; 
+          }
           print $fh "\n";
           print $fh "\n";
           print $fh "\n";
           print $fh "\n";
           print $fh "\n";
           my $classname = $class->GetName();
-          print $fh "class $classname {\n";
+          print $fh "class $classname: ";
+          #
+          # write out inheritance
+          #
+          my @inhr;
+	  foreach my $b (@$adjectives)
+          {
+             push(@inhr, "public " . $b);
+          }
+          my $inheritance = join(",\n\t\t", @inhr);
+          print $fh $inheritance;
+          #
+          # Open class definition
+          #
+          print $fh "\n{\n";
           print $fh "\n";
           print $fh "public:\n";
           #
           # print the getters and setters
 	  # 
-          my $variables = $class->GetVariables();
           foreach my $v (@$variables) {
                my $varname = $v->{name};
                my $type = $v->{type};
                
                print $fh "     void Set$varname\( const $type inarg){ m_$varname = inarg; }\n";
-               print $fh "     $type Get$varname\( void ){ return m_$varname; }\n";
+               print $fh "     $type Get$varname\( void ) const { return m_$varname; }\n";
                print $fh "\n";	
           }
-
-
+	  #
+          # Write Interface methods
+          #
+          foreach my $class (@$adjectives)
+    	  {
+               print "Loading package $class...\n"; 
+	       load($class);
+               my $temp = $class->new();
+	       if ($temp->can('DeclareMethods')) 
+               {
+                    print $fh "     ";
+                    $temp->DeclareMethods($fh);
+               }
+               else 
+               {
+                    print "Unable to call method!\n";
+               }
+          }          
           print $fh "\n";
           print $fh "private:\n";
           #
@@ -83,9 +118,35 @@ sub GenerateHeader {
 }
 
 sub GenerateImplementation {
+     my $self = shift;
+     my $filename = shift;
+     my $classnode = shift;
 
 
+     $fh = IO::File->new();
+     if ($fh->open("> $filename")) {
+          print "Opened implementation file.\n";
+	  #
+          # Write Interface methods
+          #
+          my $adjectives = $classnode->GetAdjectives();
+          foreach my $class (@$adjectives)
+    	  {
 
+	       load($class);
+               my $temp = $class->new();
+	       if ($temp->can('DefineMethods')) 
+               {
+                   print "Implementing methods for $class.\n";
+                   $temp->DefineMethods($fh, $classnode);
+               }
+               else 
+               {
+                    print "Unable to call method!\n";
+               }
+          }
+          $fh->close(); 
+     }
 }
 
 
