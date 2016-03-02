@@ -15,7 +15,8 @@ sub DeclareMethods {
      $self = shift;
      $fh   = shift;
 
-     print $fh "std::wstring Serialize(void);\n";
+     print $fh "std::wstring Serialize(void) const;\n";
+     print $fh "void Deserialize(const std::wstring &instr);\n";
 }
 
 sub DefineMethods {
@@ -26,8 +27,11 @@ sub DefineMethods {
      $classname = $classnode->GetName();
      $variables = $classnode->GetVariables();
      
+     #
+     # Define Serialize method
+     #
 
-     print $fh "std::string $classname\::Serialize(void) {\n";
+     print $fh "std::string $classname\::Serialize(void) const {\n";
      #
      # iterate the variables and write them to a string
      #
@@ -48,8 +52,22 @@ EOT
 
      }
       
-     print $fh "     retval << \'}\'";
-     print $fh "\n}\n"
+     print $fh "     retval << \'}\'\n";
+     print $fh "     return retval;";
+     print $fh "\n}\n";
+
+
+     #
+     # Define Deserialize method
+     #
+
+     print $fh "void $classname\::Deserialize(const std::string &instr) {\n";
+
+
+
+     print $fh "\n}\n";
+
+     
 
 }
 
