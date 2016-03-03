@@ -26,43 +26,56 @@ sub DefineMethods {
 
      $classname = $classnode->GetName();
      $variables = $classnode->GetVariables();
-     
+     #
+     # Include headers
+     # 
+     print $fh "#include \"Jzon.h\"\n";
      #
      # Define Serialize method
      #
-
      print $fh "std::string $classname\::Serialize(void) const {\n";
-     #
-     # iterate the variables and write them to a string
-     #
      print $fh "     std::string retval;\n"; 
-     print $fh "     retval << \'{\'\n";
-     @methodsstring;
+     print $fh "     Jzon:Writer writer;\n";
+     print $fh "     Jzon::Node node = Jzon::object();\n\n"; 
      foreach my $v (@$variables) {
           my $varname = $v->{name};
           my $type = $v->{type};
 
-
 my $line = <<"EOT";
-     retval << "\\\"$varname\\\":\\\"" << m_$varname << "\\\"";
+     node.add("$varname", m_$varname);
 EOT
-
-
           print $fh $line;
 
      }
-      
-     print $fh "     retval << \'}\'\n";
+     print $fh "     writer.writeString(node, retval);\n"; 
+
+#     print $fh "     retval << \'{\'\n";
+#     @methodsstring;
+#     foreach my $v (@$variables) {
+#          my $varname = $v->{name};
+#          my $type = $v->{type};
+#
+#
+#my $line = <<"EOT";
+#     retval << "\\\"$varname\\\":\\\"" << m_$varname << "\\\"";
+#EOT
+#
+#
+#          print $fh $line;
+#
+#     }
+#     print $fh "     retval << \'}\'\n";
+
+
+    
      print $fh "     return retval;";
      print $fh "\n}\n";
-
-
      #
      # Define Deserialize method
      #
-
      print $fh "void $classname\::Deserialize(const std::string &instr) {\n";
-
+     print $fh "     Jzon::Parser parser;\n";
+     print $fh "     Jzon::Node object = parser.parseString(instr);\n";
 
 
      print $fh "\n}\n";
