@@ -1,29 +1,31 @@
 #include "ISerializable.h"
-#include "IStorable.h"
 
 
 
 
 
-class TestClass: public Serializable,
-		public Storable
+class TestClass : public Serializable
 {
 
 public:
-     void SetMyNumber( const int inarg){ m_MyNumber = inarg; }
-     int GetMyNumber( void ) const { return m_MyNumber; }
+     TestClass(void);
+     ~TestClass(void);
 
-     void SetMyOtherNumber( const int inarg){ m_MyOtherNumber = inarg; }
-     int GetMyOtherNumber( void ) const { return m_MyOtherNumber; }
+     void SetMyNumber( const int inarg){ m_MyNumber = inarg; };
+     int GetMyNumber( void ) const { return m_MyNumber; };
 
-     void SetMyString( const string inarg){ m_MyString = inarg; }
-     string GetMyString( void ) const { return m_MyString; }
+     void SetMyOtherNumber( const int inarg){ m_MyOtherNumber = inarg; };
+     int GetMyOtherNumber( void ) const { return m_MyOtherNumber; };
 
-     void SetMyBool( const bool inarg){ m_MyBool = inarg; }
-     bool GetMyBool( void ) const { return m_MyBool; }
+     void SetMyString( const string inarg){ m_MyString = inarg; };
+     string GetMyString( void ) const { return m_MyString; };
 
-     std::wstring Serialize(void);
-     
+     void SetMyBool( const bool inarg){ m_MyBool = inarg; };
+     bool GetMyBool( void ) const { return m_MyBool; };
+
+     string Serialize(void) const;
+     void Deserialize(const string &instr);
+
 private:
      int m_MyNumber;
 

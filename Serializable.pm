@@ -15,8 +15,8 @@ sub DeclareMethods {
      $self = shift;
      $fh   = shift;
 
-     print $fh "std::wstring Serialize(void) const;\n";
-     print $fh "void Deserialize(const std::wstring &instr);\n";
+     print $fh "     string Serialize(void) const;\n";
+     print $fh "     void Deserialize(const string &instr);\n";
 }
 
 sub DefineMethods {
@@ -35,7 +35,7 @@ sub DefineMethods {
      #
      print $fh "std::string $classname\::Serialize(void) const {\n";
      print $fh "     std::string retval;\n"; 
-     print $fh "     Jzon:Writer writer;\n";
+     print $fh "     Jzon::Writer writer;\n";
      print $fh "     Jzon::Node node = Jzon::object();\n\n"; 
      foreach my $v (@$variables) {
           my $varname = $v->{name};
@@ -48,6 +48,7 @@ EOT
 
      }
      print $fh "     writer.writeString(node, retval);\n"; 
+     print $fh "     writer.setFormat(Jzon::NoFormat);\n";
      print $fh "     return retval;\n";
      print $fh "}\n";
      #
@@ -56,9 +57,23 @@ EOT
      print $fh "void $classname\::Deserialize(const std::string &instr) {\n";
      print $fh "     Jzon::Parser parser;\n";
      print $fh "     Jzon::Node object = parser.parseString(instr);\n";
-     print $fh "     if (object.isValid()) {\n";
+     print $fh "     if (object.isValid() && object.isObject() ) {\n";
+     print $fh "          Jzon::Node node;\n\n"; 
 
+     foreach my $v (@$variables) {
+          my $varname = $v->{name};
+          my $type = $v->{type};
 
+     print $fh "          node = object.get(\"$varname\");\n"; 
+          if ($type eq "int"){
+     print $fh "          if (node.isNumber()) { m_$varname = node.toInt(); }\n";
+          } elsif ($type eq "string"){
+     print $fh "          if (node.isString()) { m_$varname = node.toString(); }\n";
+          } elsif ($type eq "bool"){
+     print $fh "          if (node.isBool()) { m_$varname = node.toBool(); }\n";
+          }
+     print $fh "          else { throw; }\n\n";
+     }
 
      print $fh "     }\n";
      print $fh "     else { throw; }\n";

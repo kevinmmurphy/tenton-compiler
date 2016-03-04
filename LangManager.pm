@@ -50,7 +50,7 @@ sub GenerateHeader {
           print $fh "\n";
           print $fh "\n";
           my $classname = $class->GetName();
-          print $fh "class $classname: ";
+          print $fh "class $classname : ";
           #
           # write out inheritance
           #
@@ -68,14 +68,22 @@ sub GenerateHeader {
           print $fh "\n";
           print $fh "public:\n";
           #
+          # Define class constructor
+          #
+          print $fh "     $classname(void);\n";
+          #
+          # Define class destructor
+          #
+          print $fh "     ~$classname(void);\n\n";
+          #
           # print the getters and setters
 	  # 
           foreach my $v (@$variables) {
                my $varname = $v->{name};
                my $type = $v->{type};
                
-               print $fh "     void Set$varname\( const $type inarg){ m_$varname = inarg; }\n";
-               print $fh "     $type Get$varname\( void ) const { return m_$varname; }\n";
+               print $fh "     void Set$varname\( const $type inarg){ m_$varname = inarg; };\n";
+               print $fh "     $type Get$varname\( void ) const { return m_$varname; };\n";
                print $fh "\n";	
           }
 	  #
@@ -88,7 +96,6 @@ sub GenerateHeader {
                my $temp = $class->new();
 	       if ($temp->can('DeclareMethods')) 
                {
-                    print $fh "     ";
                     $temp->DeclareMethods($fh);
                }
                else 
@@ -126,6 +133,20 @@ sub GenerateImplementation {
      $fh = IO::File->new();
      if ($fh->open("> $filename")) {
           print "Opened implementation file.\n";
+          my $classname = $classnode->GetName();
+
+          print $fh "#include \"$classname.h\"\n\n"; 
+          
+          #
+          # Write Class Constructor
+          # 
+          print $fh "$classname\::$classname(void){\n";
+          print $fh "}\n";
+          #
+          # Write Class Destructor
+          #
+
+          print $fh "$classname\::~$classname(void){}\n"; 
 	  #
           # Write Interface methods
           #

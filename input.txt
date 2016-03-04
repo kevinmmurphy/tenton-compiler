@@ -19,6 +19,6 @@ class TestClass {
 	string MyString [];
         bool MyBool [required, mutable, ugly]; 	
 	adjective Serializable;
-	adjective Storable;
+#	adjective Storable;
 
 };
