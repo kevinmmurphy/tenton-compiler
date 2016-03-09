@@ -108,7 +108,7 @@ sub GenerateHeader {
           #
           # print the member variables
           # 
-          foreach my $v (@$variables) {
+          foreach my $v (@$variables) { 
                my $varname = $v->{name};
                my $type = $v->{type};
                
@@ -140,7 +140,25 @@ sub GenerateImplementation {
           #
           # Write Class Constructor
           # 
-          print $fh "$classname\::$classname(void){\n";
+          print $fh "$classname\::$classname(void) :";
+          my $variables = $classnode->GetVariables();
+          my @varnames;
+          foreach my $v (@$variables) {
+               my $varname = $v->{name};
+               my $type = $v->{type};
+
+               if ($type eq "int"){
+                    push(@varnames, "m_$varname" . "(DEFAULT_INT)");
+               } elsif ($type eq "string"){
+                    push(@varnames, "m_$varname" . "(DEFAULT_STR)");
+               } elsif ($type eq "bool"){
+                    push(@varnames, "m_$varname" . "(DEFAULT_BOOL)");
+               }
+          }
+          my $varinits = join(",\n\t\t\t\t", @varnames);
+          print $fh "$varinits\n";
+
+          print $fh "{\n";
           print $fh "}\n";
           #
           # Write Class Destructor
