@@ -20,5 +20,6 @@ class TestClass {
         bool MyBool [required, mutable, ugly]; 	
 	adjective Serializable;
 #	adjective Storable;
+        adjective Visitable;
 
 };
