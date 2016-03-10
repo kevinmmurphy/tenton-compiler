@@ -76,6 +76,10 @@ sub GenerateHeader {
           #
           print $fh "     ~$classname(void);\n\n";
           #
+          # print the getter for the Type
+          # 
+          print $fh "     std::string GetType( void ) const { return std::string(\"$classname\"); };\n\n";
+          #
           # print the getters and setters
 	  # 
           foreach my $v (@$variables) {

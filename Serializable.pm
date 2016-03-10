@@ -29,7 +29,7 @@ sub DefineMethods {
      #
      # Include headers
      # 
-     print $fh "#include \"Jzon.h\"\n";
+     print $fh "\n\n#include \"Jzon.h\"\n";
      #
      # Define Serialize method
      #
@@ -37,6 +37,13 @@ sub DefineMethods {
      print $fh "     std::string retval;\n"; 
      print $fh "     Jzon::Writer writer;\n";
      print $fh "     Jzon::Node node = Jzon::object();\n\n"; 
+     #
+     # Serialize a object type
+     #
+     print $fh "     node.add(\"Type\", \"$classname\");\n";
+     #
+     # Serialize each data member
+     #
      foreach my $v (@$variables) {
           my $varname = $v->{name};
           my $type = $v->{type};
@@ -47,10 +54,10 @@ EOT
           print $fh $line;
 
      }
-     print $fh "     writer.writeString(node, retval);\n"; 
      print $fh "     writer.setFormat(Jzon::NoFormat);\n";
+     print $fh "     writer.writeString(node, retval);\n"; 
      print $fh "     return retval;\n";
-     print $fh "}\n";
+     print $fh "}\n\n\n";
      #
      # Define Deserialize method
      #
@@ -59,7 +66,16 @@ EOT
      print $fh "     Jzon::Node object = parser.parseString(instr);\n";
      print $fh "     if (object.isValid() && object.isObject() ) {\n";
      print $fh "          Jzon::Node node;\n\n"; 
-
+     #
+     # Deserialize the type memeber and throw if not our class
+     #
+     print $fh "          node = object.get(\"Type\");\n";
+     print $fh "          if (!node.isString() || !(node.toString().compare(\"$classname\") == 0)){\n"; 
+     print $fh "               throw;\n";
+     print $fh "          }\n";
+     #
+     # Deserialize each of the members
+     #
      foreach my $v (@$variables) {
           my $varname = $v->{name};
           my $type = $v->{type};
