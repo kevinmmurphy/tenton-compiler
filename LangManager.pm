@@ -40,6 +40,7 @@ sub GenerateHeader {
           # print out headers and includes
           # 
           #print $fh "#include stdio.h\n";
+          print $fh "#include \"Base.h\"\n";
           foreach my $a (@$adjectives)
           {
                print $fh "#include \"I$a.h\"\n"; 
@@ -50,7 +51,7 @@ sub GenerateHeader {
           print $fh "\n";
           print $fh "\n";
           my $classname = $class->GetName();
-          print $fh "class $classname : ";
+          print $fh "class $classname : public Base,\n\t\t";
           #
           # write out inheritance
           #

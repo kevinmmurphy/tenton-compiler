@@ -1,6 +1,11 @@
 #ifndef IVISITABLE_H
 #define IVISITABLE_H
-class Visitor;
+
+
+#include "Visitor.h"
+//class Visitor   {
+// virtual void Visit( CLASSTYPE &class);
+//};
 
 class Visitable {
 public:
