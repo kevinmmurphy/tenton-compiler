@@ -26,9 +26,8 @@ sub DefineMethods {
      $fh   = shift;
      $classnode = shift; 
 
-     $classname = $classnode->GetName();
      print $fh "\nvoid $classname\::accept(Visitor visitor){\n";
-     print $fh "     visitor.Visit$classname(this);\n}\n";
+     print $fh "     visitor.Visit(this);\n}\n";
 }
 
 

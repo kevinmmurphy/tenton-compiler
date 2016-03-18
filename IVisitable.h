@@ -1,6 +1,11 @@
 #ifndef IVISITABLE_H
 #define IVISITABLE_H
-class Visitor;
+
+class Visitor {
+public: 
+    void Visit(TestClass &c);
+
+};
 
 class Visitable {
 public:
